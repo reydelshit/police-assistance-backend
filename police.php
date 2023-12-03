@@ -74,11 +74,11 @@ switch ($method) {
                     WHERE police_id = :police_id";
 
         $stmt = $conn->prepare($sql);
-        $updated_at = date('Y-m-d');
         $stmt->bindParam(':police_id', $police->police_id);
         $stmt->bindParam(':police_name', $police->police_name);
         $stmt->bindParam(':description', $police->description);
         $stmt->bindParam(':expiration_date', $police->expiration_date);
+        $stmt->bindParam(':status', $status);
         $stmt->bindParam(':racks', $police->racks);
 
 

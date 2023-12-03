@@ -18,7 +18,7 @@ switch ($method) {
 
 
         if (!isset($_GET['report_id'])) {
-            $sql = " SELECT * FROM reports";
+            $sql = " SELECT * FROM reports ORDER BY report_id DESC";
         }
 
 
@@ -41,14 +41,18 @@ switch ($method) {
 
     case "POST":
         $report = json_decode(file_get_contents('php://input'));
-        $sql = "INSERT INTO reports (incident_report, location, 	datetime_occured, more_details, image) VALUES (:incident_report, :location, :datetime_occured, :more_details,:image)";
+        $sql = "INSERT INTO reports (incident_report, location, datetime_occured, more_details, image, status) VALUES (:incident_report, :location, :datetime_occured, :more_details,:image, :status)";
         $stmt = $conn->prepare($sql);
 
+
+        $status = "active";
         $stmt->bindParam(':incident_report', $report->incident_report);
         $stmt->bindParam(':location', $report->location);
         $stmt->bindParam(':datetime_occured', $report->datetime_occured);
         $stmt->bindParam(':more_details', $report->more_details);
         $stmt->bindParam(':image', $report->image);
+        $stmt->bindParam(':status', $status);
+
 
 
         if ($stmt->execute()) {

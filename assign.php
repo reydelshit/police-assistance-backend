@@ -51,6 +51,17 @@ switch ($method) {
 
         if ($stmt->execute()) {
 
+            $sql2 = "UPDATE reports SET status = :status, assigned =:assigned WHERE report_id = :report_id";
+
+            $stmt2 = $conn->prepare($sql2);
+            $status = "police assigned";
+            $stmt2->bindParam(':report_id', $police->report_id);
+            $stmt2->bindParam(':status', $status);
+            $stmt2->bindParam(':assigned', $police->assigned);
+
+            $stmt2->execute();
+
+
             $response = [
                 "status" => "success",
                 "message" => "police successfully"
@@ -66,20 +77,15 @@ switch ($method) {
         break;
 
     case "PUT":
-        $police = json_decode(file_get_contents('php://input'));
-        $sql = "UPDATE police SET police_name= :police_name, description = :description, expiration_date = :expiration_date, racks = :racks
-                    WHERE police_id = :police_id";
+        $report = json_decode(file_get_contents('php://input'));
+        $sql2 = "UPDATE reports SET status = :status WHERE report_id = :report_id";
 
-        $stmt = $conn->prepare($sql);
-        $updated_at = date('Y-m-d');
-        $stmt->bindParam(':police_id', $police->police_id);
-        $stmt->bindParam(':police_name', $police->police_name);
-        $stmt->bindParam(':description', $police->description);
-        $stmt->bindParam(':expiration_date', $police->expiration_date);
-        $stmt->bindParam(':racks', $police->racks);
+        $stmt2 = $conn->prepare($sql2);
+        $stmt2->bindParam(':report_id', $report->report_id);
+        $stmt2->bindParam(':status', $report->status);
 
 
-        if ($stmt->execute()) {
+        if ($stmt2->execute()) {
 
             $response = [
                 "status" => "success",
